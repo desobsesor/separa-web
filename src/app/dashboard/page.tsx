@@ -7,14 +7,14 @@ import UserTable from '@/components/dashboard/UserTable';
 export default function GridExample() {
     return (
         <div className="bg-gray-100 dark:bg-gray-900 px-2 sm:px-4 lg:px-6 w-full">
-            <div className="w-full mx-auto max-w-screen-2xl">
+            <div className="w-full mx-auto max-w-screen-2xl mt-4">
                 <GridLayout
-                    header={<div className="h-20 items-center justify-center">
-                        <div className="grid flex-col items-center text-center">
-                            <h1 className="flex mt-6 text-4xl font-bold title-separa dark:text-white">
+                    header={<div className="h-auto items-center justify-center">
+                        <div className="flex flex-col md:flex-row items-center justify-center gap-2 md:gap-4 text-center">
+                            <h1 className="text-4xl font-bold title-separa dark:text-white">
                                 Separa App
                             </h1>
-                            <p className="flex-col text-xl -mt-8 subtitle-separa text-gray-600 dark:text-gray-300">
+                            <p className="text-xl subtitle-separa text-gray-600 dark:text-gray-300 md:mt-0">
                                 Una aplicación moderna para la reserva de espacios
                             </p>
                         </div>

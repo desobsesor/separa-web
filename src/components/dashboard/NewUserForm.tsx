@@ -4,6 +4,9 @@ import React, { useState } from 'react';
 import { createUser, CreateUserData } from '@/services/api';
 import useUI from '@/context/UIContext';
 import Card from '../ui/Card';
+import { PlusIcon, TrashIcon } from '@heroicons/react/16/solid';
+import { StopIcon, WindowIcon } from '@heroicons/react/20/solid';
+import { ChevronDoubleUpIcon } from '@heroicons/react/16/solid';
 
 interface FormData {
     name: string;
@@ -253,7 +256,7 @@ const NewUserForm: React.FC = () => {
         <div className="min-w-full py-0 flex flex-col pt-8">
             <Card title="Nuevo usuario" className='mt-1 mx-2 px-2'>
                 <div className="flex flex-col items-center">
-                    <form onSubmit={handleSubmit} className="space-y-2 mx-0">
+                    <form onSubmit={handleSubmit} className="space-y-2 mx-0 min-w-full">
                         <div className="relative">
                             {errors.name && (
                                 <Tooltip message={errors.name} type="error" isVisible={true} />
@@ -327,14 +330,35 @@ const NewUserForm: React.FC = () => {
                                         <Tooltip message={errors.address} type="error" isVisible={true} />
                                     )}
                                 </div>
-
-                                <button
-                                    type="submit"
-                                    disabled={isSubmitting}
-                                    className="w-full cursor-pointer button-separa text-white font-medium py-2 px-4 rounded-md transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 disabled:opacity-50"
-                                >
-                                    {isSubmitting ? 'Guardando...' : 'Guardar'}
-                                </button>
+                                <div className="flex justify-end space-x-4 pt-2">
+                                    <button
+                                        type="button"
+                                        className='relative flex p-2 rounded-md font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 bg-gray-500 hover:bg-gray-600 text-white bg-secondary hover:bg-secondary/90 focus:ring-secondary/50'
+                                        onClick={() => {
+                                            setFormData({
+                                                name: '',
+                                                phoneNumber: '',
+                                                email: '',
+                                                address: '',
+                                                password: '',
+                                                createdAt: new Date(),
+                                            });
+                                            setShowAdditionalFields(false);
+                                            setErrors({});
+                                        }}
+                                    >
+                                        <ChevronDoubleUpIcon className="h-5 w-5 mr-2 text-blue-50" />
+                                        Cancelar
+                                    </button>
+                                    <button
+                                        type="submit"
+                                        disabled={isSubmitting}
+                                        className="relative flex w-full cursor-pointer button-separa text-white font-medium py-2 px-4 rounded-md transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 disabled:opacity-50"
+                                    >
+                                        {!isSubmitting && <PlusIcon className="h-6 w-6 mr-2 text-white" />}
+                                        {isSubmitting ? 'Guardando...' : 'Guardar'}
+                                    </button>
+                                </div>
                             </div>
                         )}
                     </form>

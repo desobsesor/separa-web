@@ -35,6 +35,12 @@ const TimelineBar: React.FC = () => {
     });
 
     useEffect(() => {
+        if (date) {
+            setSelectedDate(date);
+        }
+    }, [date, ui]);
+
+    useEffect(() => {
         const fetchTimeBlocks = async () => {
             try {
                 setLoading(true);
@@ -58,12 +64,6 @@ const TimelineBar: React.FC = () => {
         };
         fetchTimeBlocks();
     }, [selectedDate]);
-
-    useEffect(() => {
-        if (date) {
-            setSelectedDate(date);
-        }
-    }, [date]);
 
     return (
         <div className="min-w-full py-0 flex flex-col pt-8">
@@ -129,7 +129,7 @@ const TimelineBar: React.FC = () => {
                                             top: `${startPos}%`,
                                             height: `${height}%`,
                                         }}
-                                        title={`${block.attachedUser?.name}`}
+                                        title={`${block.attachedUser?.name} ${block.startTime}`}
                                     >
                                         <div className="text-xs px-1 font-semibold truncate" title={`${block.attachedUser?.name}`}></div>
                                     </div>

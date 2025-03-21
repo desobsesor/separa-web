@@ -8,6 +8,9 @@ import 'react-clock/dist/Clock.css';
 import { getCurrentDate, combineDateAndTime, dateToLocalISOString, getNextDayDate } from '@/utils/dateUtils';
 import useUI from '@/context/UIContext';
 import Card from '../ui/Card';
+import { CheckIcon, PlusIcon } from '@heroicons/react/24/solid';
+import { TrashIcon } from '@heroicons/react/16/solid';
+import { DocumentPlusIcon } from '@heroicons/react/16/solid';
 
 interface FormData {
     startTime: string;
@@ -209,7 +212,6 @@ const NewBlockForm: React.FC = () => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        console.log('Formulario enviado');
 
         if (!validateForm()) {
             showNotification('Por favor, corrija los errores en el formulario', 'error');
@@ -229,7 +231,6 @@ const NewBlockForm: React.FC = () => {
                 style: formData.style
             };
 
-            console.log('Datos del bloque a crear:', blockData);
             await createBlock(blockData);
 
             showNotification('Bloque de tiempo creado exitosamente', 'success');
@@ -261,78 +262,92 @@ const NewBlockForm: React.FC = () => {
                 />
 
                 <form onSubmit={handleSubmit} className="space-y-2 px-2">
-
-
-                    <div className="flex space-x-2">
-                        <div className='flex-1'>
-                            <label htmlFor="date" className="block text-sm font-medium text-gray-700 mb-1">
-                                Fecha
-                            </label>
-                            <input
-                                type="date"
-                                id="date"
-                                name="date"
-                                value={formData.date}
-                                onChange={handleChange}
-                                className={`w-32 pl-2 mr-0 py-1.5 border ${errors.date ? 'border-red-500' : 'border-gray-300'} rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500`}
-                            />
-                            {errors.date && <p className="mt-1 text-xs text-red-500">{errors.date}</p>}
+                    <div className="flex flex-col gap-2">
+                        <div className="flex justify-center md:hidden lg:hidden">
+                            <div className='w-full md:flex-1'>
+                                <label htmlFor="date" className="block text-sm font-medium text-gray-700 mb-1">
+                                    Fecha
+                                </label>
+                                <input
+                                    type="date"
+                                    id="date"
+                                    name="date"
+                                    value={formData.date}
+                                    onChange={handleChange}
+                                    className={`w-full md:w-32 pl-2 mr-0 py-1.5 border ${errors.date ? 'border-red-500' : 'border-gray-300'} rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500`}
+                                />
+                                {errors.date && <p className="mt-1 text-xs text-red-500">{errors.date}</p>}
+                            </div>
                         </div>
 
-                        <div className="flex-1">
-                            <label htmlFor="startTime" className="block text-sm font-medium text-gray-700 mb-1">
-                                Hora inicio
-                            </label>
-                            <TimePicker
-                                onChange={(value) => {
-                                    handleChange({
-                                        target: { name: 'startTime', value: value ?? '' }
-                                    } as React.ChangeEvent<HTMLInputElement>);
+                        <div className="flex flex-row gap-2">
+                            <div className='hidden md:block flex-1'>
+                                <label htmlFor="date" className="block text-sm font-medium text-gray-700 mb-1">
+                                    Fecha
+                                </label>
+                                <input
+                                    type="date"
+                                    id="date"
+                                    name="date"
+                                    value={formData.date}
+                                    onChange={handleChange}
+                                    className={`w-32 pl-2 mr-0 py-1.5 border ${errors.date ? 'border-red-500' : 'border-gray-300'} rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500`}
+                                />
+                                {errors.date && <p className="mt-1 text-xs text-red-500">{errors.date}</p>}
+                            </div>
 
-                                    // Si el valor tiene formato HH:mm (5 caracteres), mover el foco al siguiente campo
-                                    if (value && value.length === 5 && !isCurrentDate) {
-                                        // Usar setTimeout para asegurar que el cambio de estado se complete primero
-                                        setTimeout(() => {
-                                            if (endTimePickerRef.current) {
-                                                // Acceder al input dentro del componente TimePicker
-                                                const inputElement = endTimePickerRef.current.querySelector('input');
-                                                if (inputElement) {
-                                                    inputElement.focus();
-                                                }
-                                            }
-                                        }, 10);
-                                    }
-                                }}
-                                value={formData.startTime}
-                                format="HH:mm"
-                                disableClock={true}
-                                clearIcon={null}
-                                disabled={isCurrentDate}
-                                className={`${errors.startTime ? 'border-red-500' : 'border-gray-300'} ${isCurrentDate ? 'opacity-50 cursor-not-allowed' : ''}`}
-                            />
-                            {errors.startTime && <p className="mt-1 text-xs text-red-500">{errors.startTime}</p>}
-                        </div>
-
-                        <div className="flex-1">
-                            <label htmlFor="endTime" className="block text-sm font-medium text-gray-700 mb-1">
-                                Hora fin
-                            </label>
-                            <div ref={endTimePickerRef}>
+                            <div className="flex-1">
+                                <label htmlFor="startTime" className="block text-sm font-medium text-gray-700 mb-1">
+                                    Hora inicio
+                                </label>
                                 <TimePicker
                                     onChange={(value) => {
                                         handleChange({
-                                            target: { name: 'endTime', value: value ?? '' }
+                                            target: { name: 'startTime', value: value ?? '' }
                                         } as React.ChangeEvent<HTMLInputElement>);
+
+                                        if (value && value.length === 5 && !isCurrentDate) {
+                                            setTimeout(() => {
+                                                if (endTimePickerRef.current) {
+                                                    const inputElement = endTimePickerRef.current.querySelector('input');
+                                                    if (inputElement) {
+                                                        inputElement.focus();
+                                                    }
+                                                }
+                                            }, 10);
+                                        }
                                     }}
-                                    value={formData.endTime}
+                                    value={formData.startTime}
                                     format="HH:mm"
                                     disableClock={true}
                                     clearIcon={null}
                                     disabled={isCurrentDate}
-                                    className={`min-w-full ${errors.endTime ? 'border-red-500' : 'border-gray-300'} ${isCurrentDate ? 'opacity-50 cursor-not-allowed' : ''}`}
+                                    className={`${errors.startTime ? 'border-red-500' : 'border-gray-300'} ${isCurrentDate ? 'opacity-50 cursor-not-allowed' : ''}`}
                                 />
+                                {errors.startTime && <p className="mt-1 text-xs text-red-500">{errors.startTime}</p>}
                             </div>
-                            {errors.endTime && <p className="mt-1 text-xs text-red-500">{errors.endTime}</p>}
+
+                            <div className="flex-1">
+                                <label htmlFor="endTime" className="block text-sm font-medium text-gray-700 mb-1">
+                                    Hora fin
+                                </label>
+                                <div ref={endTimePickerRef}>
+                                    <TimePicker
+                                        onChange={(value) => {
+                                            handleChange({
+                                                target: { name: 'endTime', value: value ?? '' }
+                                            } as React.ChangeEvent<HTMLInputElement>);
+                                        }}
+                                        value={formData.endTime}
+                                        format="HH:mm"
+                                        disableClock={true}
+                                        clearIcon={null}
+                                        disabled={isCurrentDate}
+                                        className={`min-w-full ${errors.endTime ? 'border-red-500' : 'border-gray-300'} ${isCurrentDate ? 'opacity-50 cursor-not-allowed' : ''}`}
+                                    />
+                                </div>
+                                {errors.endTime && <p className="mt-1 text-xs text-red-500">{errors.endTime}</p>}
+                            </div>
                         </div>
                     </div>
 
@@ -340,7 +355,7 @@ const NewBlockForm: React.FC = () => {
                         <label htmlFor="style" className="block text-sm font-medium text-gray-700 mb-1">
                             Tipo de bloque
                         </label>
-                        <div className="grid grid-cols-2 gap-2 mb-2">
+                        <div className="grid grid-cols-3 gap-2 mb-2">
                             {blockStyles.map(style => (
                                 <div
                                     key={style.id}
@@ -367,9 +382,12 @@ const NewBlockForm: React.FC = () => {
                                     <div
                                         key={user._id}
                                         onClick={() => !isCurrentDate && handleUserSelect(user)}
-                                        className={`p-2 border-b border-gray-200 ${!isCurrentDate ? 'cursor-pointer hover:bg-gray-50' : 'cursor-not-allowed'} ${selectedUser?._id === user._id ? 'bg-blue-50' : ''}`}
+                                        className={`p-2 border-b border-gray-200 ${!isCurrentDate ? 'cursor-pointer hover:bg-gray-50' : 'cursor-not-allowed'} ${selectedUser?._id === user._id ? 'bg-blue-100' : ''} flex justify-between items-center`}
                                     >
                                         <div className="font-medium">{user.name}</div>
+                                        {selectedUser?._id === user._id && (
+                                            <CheckIcon className="h-5 w-5 text-green-600" />
+                                        )}
                                     </div>
                                 ))
                             )}
@@ -378,7 +396,7 @@ const NewBlockForm: React.FC = () => {
                     <div className="flex justify-end space-x-4 pt-2">
                         <button
                             type="button"
-                            className='p-2 rounded-md font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 bg-gray-500 hover:bg-gray-600 text-white bg-secondary hover:bg-secondary/90 focus:ring-secondary/50'
+                            className='relative flex p-2 rounded-md font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 bg-gray-500 hover:bg-gray-600 text-white bg-secondary hover:bg-secondary/90 focus:ring-secondary/50'
                             onClick={() => {
                                 setFormData({
                                     startTime: '',
@@ -391,13 +409,15 @@ const NewBlockForm: React.FC = () => {
                                 setErrors({});
                             }}
                         >
+                            <TrashIcon className="h-5 w-5 mr-2 text-blue-50" />
                             Limpiar
                         </button>
                         <button
                             type="submit"
-                            className={`p-2 rounded-md font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 bg-primary text-white hover:bg-primary/90 focus:ring-primary/50 cursor-pointer button-separa ${!isCurrentDate ? 'hover:bg-blue-600' : 'opacity-50 cursor-not-allowed'}`}
+                            className={`relative flex w-full p-2 rounded-md font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 bg-primary text-white hover:bg-primary/90 focus:ring-primary/50 cursor-pointer button-separa ${!isCurrentDate ? 'hover:bg-blue-600' : 'opacity-50 cursor-not-allowed'}`}
                             disabled={isSubmitting || isCurrentDate}
                         >
+                            {!isCurrentDate && <PlusIcon className="h-6 w-6 mr-2 text-white" />}
                             {isSubmitting ? (
                                 <>
                                     <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -407,6 +427,7 @@ const NewBlockForm: React.FC = () => {
                                     Guardando...
                                 </>
                             ) : isCurrentDate ? 'No disponible' : 'Guardar bloque'}
+
                         </button>
                     </div>
                 </form>

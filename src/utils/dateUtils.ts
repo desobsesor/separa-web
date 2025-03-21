@@ -83,8 +83,6 @@ export const combineDateAndTime = (dateStr: string, timeStr: string): Date => {
  */
 export const dateToLocalISOString = (date: Date): string => {
     const pad = (num: number) => String(num).padStart(2, '0');
-    console.log(pad, date);
-
     return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
 };
 

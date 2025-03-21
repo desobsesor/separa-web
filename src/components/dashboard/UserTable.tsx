@@ -208,7 +208,6 @@ const UserTable: React.FC<UserTableProps> = ({ initialUsers = [] }) => {
                                 if (e.key === 'Enter') {
                                     setLoading(true);
                                     try {
-                                        console.log('Filtro aplicado:', filter, selectedFields, date);
                                         const filteredUsers = await getUsersWithReservations(filter, selectedFields, 1, 10, date);
                                         setUsers(filteredUsers);
                                         setHasMore(false);

@@ -144,7 +144,6 @@ export const getTimeBlocksByDate = async (date: string): Promise<TimeBlock[]> =>
   try {
     const response = await api.get(`/blocks/by-date?date=${date}&limit=24&page=1`);
     if (response.data.data.length > 0) {
-      console.log('response.data.data:', response.data.data);
       return response.data.data;
     } else {
       return [];
@@ -177,7 +176,6 @@ export const createUser = async (userData: CreateUserData): Promise<User> => {
  */
 export const createBlock = async (blockData: CreateBlockData): Promise<TimeBlock> => {
   try {
-    console.log('blockData:', blockData);
     const response = await api.post('/blocks', blockData);
     return response.data;
   } catch (error) {
